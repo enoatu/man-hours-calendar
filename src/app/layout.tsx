@@ -17,9 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </Head>
       <body>
         {/* beautiful h1 */}
-        <header className="w-full flex justify-center align-center">
-          <a href="./" rel="noopener noreferrer">
-            <h1 className="text-4xl font-bold text-center text-primary-800">工数管理システムMU</h1>
+        <header className="w-full flex justify-center align-center bg-primary-100 p-3">
+          <a href="./" rel="noopener noreferrer"  className="bg-white">
+            <h1 className="m-4 text-4xl font-bold text-center text-primary-800">工数管理システムMU</h1>
           </a>
         </header>
         <main>

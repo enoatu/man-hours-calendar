@@ -1,6 +1,11 @@
 import React from 'react'
+import { Button } from '@/components/Button'
 
-export const DataControl = () => {
+type DataControlProps = {
+  className?: string,
+}
+
+export const DataControl = ({ className }: DataControlProps) => {
   const importData = [
     'startDate',
     'isRestWeekend',
@@ -39,24 +44,20 @@ export const DataControl = () => {
   }
 
   return (
-    <>
+    <div className={"grid grid-cols-2 gap-4 p-4 bg-gray-100 " + className}>
       <span>エクスポート</span>
-      <button onClick={exportLocalStorages}>実行</button>
-      <hr />
+      <Button className="w-full bg-white" onClick={exportLocalStorages}>実行</Button>
       <span>インポート</span>
       <input type="file" onChange={importLocalStorages} />
-      <hr />
-      <div>
       <span>リセット</span>
-        <button onClick={() => {
-          if (window.confirm('リセットしますか？')) {
-            localStorage.clear();
-            location.reload();
-          }
-        }}>
-        実行
-        </button>
-      </div>
-    </>
+      <Button className="w-full bg-white" onClick={() => {
+        if (window.confirm('リセットしますか？')) {
+          localStorage.clear();
+          location.reload();
+        }
+      }}>
+      実行
+      </Button>
+    </div>
   )
 }

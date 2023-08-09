@@ -100,12 +100,12 @@ const CalendarManHours = () => {
   }, [startDate, isRestWeekend, isRestHoliday, userRestDays])
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen py-2">
+    <main className="flex flex-col items-center justify-center min-h-screen py-2 max-w-4xl mx-auto">
       <div className="grid grid-cols-2 gap-4 p-2 items-center text-center w-96">
         <span className="text-lg font-bold">開始日</span>
-        <StartDateSetting className="border border-gray-400 p-2 m-2 w-48" startDate={startDate} changeStartDate={changeStartDate} />
+        <StartDateSetting className="w-full" startDate={startDate} changeStartDate={changeStartDate} />
         <span className="text-lg font-bold">土日を休みとする</span>
-        <div className="flex justify-between items-center mx-2 max-w-48 gap-4">
+        <div className="flex justify-between items-center mx-2 w-full gap-4">
           {['はい', 'いいえ'].map((label, i) => (
             <div className="flex-1">
               <input id={`isRestWeekend${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestWeekend" value={String(i === 0)} checked={isRestWeekend === (i === 0)} onChange={() => setIsRestWeekend(i === 0)}/>
@@ -115,7 +115,7 @@ const CalendarManHours = () => {
           ))}
         </div>
         <span className="text-lg font-bold">祝日を休みとする</span>
-        <div className="flex justify-between items-center mx-2 max-w-48 gap-4">
+        <div className="flex justify-between items-center mx-2 w-full gap-4">
           {['はい', 'いいえ'].map((label, i) => (
             <div className="flex-1">
               <input id={`isRestHoliday${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestHoliday" value={String(i === 0)} checked={isRestHoliday === (i === 0)} onChange={() => setIsRestHoliday(i === 0)}/>
@@ -126,7 +126,7 @@ const CalendarManHours = () => {
         </div>
         <span className="text-lg font-bold">その他の休み設定</span>
         <UserRestDaysSetting
-          className="border border-gray-400 p-2 m-2 w-48"
+          className="w-full"
           userRestDays={userRestDays}
           setUserRestDays={setUserRestDays}
           rawHolidays={rawHolidays}
@@ -152,7 +152,12 @@ const CalendarManHours = () => {
         }
       />
       <hr />
-      <DataControl />
+      <div>
+        <div className="mt-8 max-w-2xl">
+          <h2 className="text-lg font-bold">データ管理</h2>
+          <DataControl className="mt-2" />
+        </div>
+      </div>
     </main>
   )
 }

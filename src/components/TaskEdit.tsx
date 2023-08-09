@@ -2,6 +2,7 @@ import React from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import { generateRand } from '@/utils/number'
 import { displayFmt } from '@/utils/date'
+import { Button } from '@/components/Button'
 
 export type Task = {
   id: number,
@@ -55,9 +56,9 @@ export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
     updateTasks(newTasks)
   }
   return (
-    <div className="task-edit">
-      <div className="task-list task-header">
-        <div className="task-item-wrapper task-header">
+    <div className="m-4">
+      <div className="border flex flex-col task-header">
+        <div className="flex justify-center text-center items-center">
           <div className="task-item task-header">タスク名</div>
           <div className="task-item task-header">かかる日数</div>
           <div className="task-item task-header">開始日<br/>(自動作成)</div>
@@ -66,10 +67,10 @@ export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
           <div className="task-item task-header">編集</div>
         </div>
       </div>
-      <div className="task-list">
+      <div className="border flex flex-col">
         <ReactSortable list={tasks} setList={(c) => updateTasks(c) }>
           {tasks.map((t) => (
-            <div key={t.id} className="task-item-wrapper">
+            <div key={t.id} className="flex justify-center text-center items-center">
               <div className="task-item">
                 <input type="text" value={t.name} onChange={(e) => editTaskName(t.id, e.target.value)}/>
               </div>
@@ -82,8 +83,8 @@ export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
               <div className="task-item"><button className={tasks.length === 1 ? 'disable-delete-btn' : ''} onClick={() => deleteTask(t.id)}>削除</button></div>
             </div>
           ))}
-          <div className="add-task-wrapper">
-            <button className="add-task" onClick={() => addTask()}>＋タスクを追加</button>
+          <div className="flex justify-center item-center">
+            <Button className="w-full" onClick={() => addTask()}>＋タスクを追加</Button>
           </div>
         </ReactSortable>
         <div>
@@ -96,24 +97,6 @@ export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
         </div>
       </div>
       <style jsx>{`
-        .task-edit {
-          margin-top: 10px;
-          margin-bottom: 10px;
-        }
-        .task-list {
-          box-sizing: border-box;
-          border: 1px #ccc solid;
-          display: flex;
-          flex-direction: column;
-        }
-        .task-item-wrapper {
-          display: flex;
-        }
-        .task-header.task-item-wrapper {
-          justify-content: center;
-          text-align: center;
-          align-items: center;
-        }
         .task-item {
           display: flex;
           background-color: #fff;
@@ -161,20 +144,6 @@ export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
         .disable-delete-btn {
           opacity: 0.5;
           cursor: not-allowed;
-        }
-        .add-task-wrapper {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100%;
-        }
-        .add-task {
-          width: 90%;
-          padding: 5px 10px;
-          border: 1px #ccc solid;
-          border-radius: 5px;
-          background-color: #fff;
-          cursor: pointer;
         }
       `}</style>
     </div>

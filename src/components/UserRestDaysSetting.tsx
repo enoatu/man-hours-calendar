@@ -3,6 +3,7 @@ import { Calendar } from 'react-calendar'
 import { fmt } from '@/utils/date'
 import type { RawHolidays } from '@/hooks/useHoliday'
 import { Modal } from '@/components/Modal'
+import { Button } from '@/components/Button'
 
 export type UserRestDays = { [key: string]: string }
 
@@ -16,9 +17,9 @@ export const UserRestDaysSetting = ({ className, userRestDays, setUserRestDays, 
   const [isSettingUserRestDays, changeIsSettingUserRestDays] = useState<boolean>(false)
   return (
     <>
-      <button className={className} onClick={() => changeIsSettingUserRestDays(!isSettingUserRestDays)}>
+      <Button className={className} onClick={() => changeIsSettingUserRestDays(!isSettingUserRestDays)}>
        { Object.keys(userRestDays).length }日間
-      </button>
+      </Button>
       <Modal isOpen={isSettingUserRestDays} closeModal={() => changeIsSettingUserRestDays(false)} >
         <Calendar
           onChange={(value) => {
