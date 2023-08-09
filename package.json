@@ -6,7 +6,9 @@
     "dev": "next dev --port=4343",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@types/node": "20.4.9",
@@ -15,19 +17,27 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.13",
-    "i18next": "^23.4.4",
     "next": "13.4.13",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-calendar": "^4.6.0",
     "react-dom": "18.2.0",
-    "react-i18next": "^13.0.3",
     "react-sortablejs": "^6.1.4",
     "sortablejs": "^1.15.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "@types/sortablejs": "^1.15.1"
+    "@storybook/addon-essentials": "^7.2.2",
+    "@storybook/addon-interactions": "^7.2.2",
+    "@storybook/addon-links": "^7.2.2",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.2.2",
+    "@storybook/nextjs": "^7.2.2",
+    "@storybook/react": "^7.2.2",
+    "@storybook/testing-library": "^0.2.0",
+    "@types/sortablejs": "^1.15.1",
+    "eslint-plugin-storybook": "^0.6.13",
+    "storybook": "^7.2.2"
   }
 }
