@@ -100,15 +100,33 @@ const CalendarManHours = () => {
   }, [startDate, isRestWeekend, isRestHoliday, userRestDays])
 
   return (
-    <main>
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div className="col-span-2 md:col-span-1">
-          <StartDateSetting startDate={startDate} changeStartDate={changeStartDate} />
+    <main className="flex flex-col items-center justify-center min-h-screen py-2">
+      <div className="grid grid-cols-2 gap-4 p-2 items-center text-center w-96">
+        <span className="text-lg font-bold">開始日</span>
+        <StartDateSetting className="border border-gray-400 p-2 m-2 w-48" startDate={startDate} changeStartDate={changeStartDate} />
+        <span className="text-lg font-bold">土日を休みとする</span>
+        <div className="flex justify-between items-center mx-2 max-w-48 gap-4">
+          {['はい', 'いいえ'].map((label, i) => (
+            <div className="flex-1">
+              <input id={`isRestWeekend${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestWeekend" value={String(i === 0)} checked={isRestWeekend === (i === 0)} onChange={() => setIsRestWeekend(i === 0)}/>
+              <label htmlFor={`isRestWeekend${i}`} className="block cursor-pointer border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-blue-500">{label}
+              </label>
+            </div>
+          ))}
         </div>
-        <p style={{paddingTop: 10}}>土日を休みとする:<button onClick={() => setIsRestWeekend(!isRestWeekend)}> {isRestWeekend ? 'はい' : 'いいえ'}</button></p>
-        <p style={{paddingBottom: 10}}>祝日を休みとする:<button onClick={() => setIsRestHoliday(!isRestHoliday)}> {isRestHoliday ? 'はい' : 'いいえ'}</button></p>
-        <p>その他休み設定: {Object.keys(userRestDays).length ? 'あり': '未設定'}</p>
+        <span className="text-lg font-bold">祝日を休みとする</span>
+        <div className="flex justify-between items-center mx-2 max-w-48 gap-4">
+          {['はい', 'いいえ'].map((label, i) => (
+            <div className="flex-1">
+              <input id={`isRestHoliday${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestHoliday" value={String(i === 0)} checked={isRestHoliday === (i === 0)} onChange={() => setIsRestHoliday(i === 0)}/>
+              <label htmlFor={`isRestHoliday${i}`} className="block cursor-pointer border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-blue-500">{label}
+              </label>
+            </div>
+          ))}
+        </div>
+        <span className="text-lg font-bold">その他の休み設定</span>
         <UserRestDaysSetting
+          className="border border-gray-400 p-2 m-2 w-48"
           userRestDays={userRestDays}
           setUserRestDays={setUserRestDays}
           rawHolidays={rawHolidays}

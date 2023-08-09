@@ -1,23 +1,25 @@
 import React, { useState } from 'react'
 import { Calendar } from 'react-calendar'
 import { fmt } from '@/utils/date'
-import { RawHolidays } from '@/hooks/useHoliday'
+import type { RawHolidays } from '@/hooks/useHoliday'
+import { Modal } from '@/components/Modal'
 
 export type UserRestDays = { [key: string]: string }
 
 export type UserRestDaysSettingProps = {
+  className?: string,
   userRestDays: UserRestDays,
   setUserRestDays: (arg: UserRestDays) => void,
   rawHolidays: RawHolidays,
 }
-export const UserRestDaysSetting = ({ userRestDays, setUserRestDays, rawHolidays }: UserRestDaysSettingProps) => {
+export const UserRestDaysSetting = ({ className, userRestDays, setUserRestDays, rawHolidays }: UserRestDaysSettingProps) => {
   const [isSettingUserRestDays, changeIsSettingUserRestDays] = useState<boolean>(false)
   return (
     <>
-      <button onClick={() => changeIsSettingUserRestDays(!isSettingUserRestDays)}>
-        {isSettingUserRestDays ? '設定終了' : '設定開始'}
+      <button className={className} onClick={() => changeIsSettingUserRestDays(!isSettingUserRestDays)}>
+       { Object.keys(userRestDays).length }日間
       </button>
-      {isSettingUserRestDays &&
+      <Modal isOpen={isSettingUserRestDays} closeModal={() => changeIsSettingUserRestDays(false)} >
         <Calendar
           onChange={(value) => {
             if (value instanceof Date) {
@@ -37,7 +39,7 @@ export const UserRestDaysSetting = ({ userRestDays, setUserRestDays, rawHolidays
             </div>
           }
         />
-      }
+      </Modal>
     </>
   )
 }
