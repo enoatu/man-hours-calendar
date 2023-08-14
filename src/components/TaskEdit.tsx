@@ -15,26 +15,26 @@ export type TaskEditProps = {
   tasks: Task[],
   updateTasks: (arg: Task[]) => void,
 }
-export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
+export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
   const editTaskName = (id: number, name: string) => {
     const newTasks = tasks.map(task => {
-        if (task.id === id) {
-            return {...task, name}
-        }
-        return task
+      if (task.id === id) {
+        return { ...task, name }
+      }
+      return task
     })
     updateTasks(newTasks)
   }
   const editTaskDays = (id: number, days: string) => {
     const newTasks = tasks.map(task => {
-        if (task.id === id) {
-            let daysNumber = Number(days)
-            if (isNaN(daysNumber) || daysNumber < 0) {
-              daysNumber = 0
-            }
-            return {...task, days: daysNumber}
+      if (task.id === id) {
+        let daysNumber = Number(days)
+        if (isNaN(daysNumber) || daysNumber < 0) {
+          daysNumber = 0
         }
-        return task
+        return { ...task, days: daysNumber }
+      }
+      return task
     })
     updateTasks(newTasks)
   }
@@ -58,29 +58,27 @@ export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
   return (
     <div className="m-4">
       <div className="border flex flex-col task-header">
-        <div className="flex justify-center text-center items-center">
-          <div className="task-item task-header">タスク名</div>
-          <div className="task-item task-header">かかる日数</div>
-          <div className="task-item task-header">開始日<br/>(自動作成)</div>
-          <div className="task-item task-header">終了日<br/>(自動作成)</div>
-          <div className="task-item task-header">並替</div>
-          <div className="task-item task-header">編集</div>
+        <div className="flex justify-center text-center items-center gap-2">
+          <div className="w-64">タスク名</div>
+          <div className="w-24">かかる日数</div>
+          <div className="w-32">開始日<br />(自動作成)</div>
+          <div className="w-32">終了日<br />(自動作成)</div>
+          <div className="w-24">編集</div>
         </div>
       </div>
       <div className="border flex flex-col">
-        <ReactSortable list={tasks} setList={(c) => updateTasks(c) }>
+        <ReactSortable list={tasks} setList={(c) => updateTasks(c)}>
           {tasks.map((t) => (
-            <div key={t.id} className="flex justify-center text-center items-center">
-              <div className="task-item">
-                <input type="text" value={t.name} onChange={(e) => editTaskName(t.id, e.target.value)}/>
+            <div key={t.id} className="flex justify-center text-center items-center gap-2 cursor-move">
+              <div className="py-1">
+                <input type="text" className="w-64 p-3 bg-sky-50" value={t.name} onChange={(e) => editTaskName(t.id, e.target.value)} />
               </div>
-              <div className="task-item">
-                <input type="text" value={t.days} onChange={(e) => editTaskDays(t.id, e.target.value)}/>
+              <div className="py-1">
+                <input type="text" className="w-24 p-3 bg-sky-50" value={t.days} onChange={(e) => editTaskDays(t.id, e.target.value)} />
               </div>
-              <div className="task-item">{displayFmt(t.start)}</div>
-              <div className="task-item">{displayFmt(t.end)}</div>
-              <div className="task-item">☰</div>
-              <div className="task-item"><button className={tasks.length === 1 ? 'disable-delete-btn' : ''} onClick={() => deleteTask(t.id)}>削除</button></div>
+              <div className="w-32">{displayFmt(t.start)}</div>
+              <div className="w-32">{displayFmt(t.end)}</div>
+              <div className="w-24"><Button className={'p-3 ' + (tasks.length === 1 ? 'disabled' : 'bg-red-300')} onClick={() => deleteTask(t.id)}>削除</Button></div>
             </div>
           ))}
           <div className="flex justify-center item-center">
@@ -88,12 +86,12 @@ export const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
           </div>
         </ReactSortable>
         <div>
-        ※コピペ用
-        {tasks.map((t) => (
-          <div key={t.id} className="task-item-wrapper">
-            {t.name} {displayFmt(t.start)}〜{displayFmt(t.end)}
-          </div>
-        ))}
+          ※コピペ用
+          {tasks.map((t) => (
+            <div key={t.id} className="task-item-wrapper">
+              {t.name} {displayFmt(t.start)}〜{displayFmt(t.end)}
+            </div>
+          ))}
         </div>
       </div>
       <style jsx>{`
