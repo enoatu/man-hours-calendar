@@ -56,29 +56,27 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
     updateTasks(newTasks)
   }
   return (
-    <div className="m-4">
-      <div className="border flex flex-col task-header">
-        <div className="flex justify-center text-center items-center gap-2">
-          <div className="w-64">タスク名</div>
-          <div className="w-24">かかる日数</div>
-          <div className="w-32">開始日<br />(自動作成)</div>
-          <div className="w-32">終了日<br />(自動作成)</div>
-          <div className="w-24">編集</div>
-        </div>
+    <div className="m-4 w-full">
+      <div className="flex text-center items-center border">
+        <div className="w-1/2">タスク名</div>
+        <div className="w-1/8">かかる日数</div>
+        <div className="w-1/8"><span>開始日(自動作成)</span></div>
+        <div className="w-1/8"><span>終了日<br />(自動作成)</span></div>
+        <div className="w-1/8">編集</div>
       </div>
       <div className="border flex flex-col">
         <ReactSortable list={tasks} setList={(c) => updateTasks(c)}>
           {tasks.map((t) => (
-            <div key={t.id} className="flex justify-center text-center items-center gap-2 cursor-move">
-              <div className="py-1">
-                <input type="text" className="w-64 p-3 bg-sky-50" value={t.name} onChange={(e) => editTaskName(t.id, e.target.value)} />
+            <div key={t.id} className="flex justify-center text-center items-center cursor-move">
+              <div className="w-1/2">
+                <input type="text" className="w-full p-3 bg-sky-50" value={t.name} onChange={(e) => editTaskName(t.id, e.target.value)} />
               </div>
-              <div className="py-1">
-                <input type="text" className="w-24 p-3 bg-sky-50" value={t.days} onChange={(e) => editTaskDays(t.id, e.target.value)} />
+              <div className="w-1/8">
+                <input type="text" className="w-full p-3 bg-sky-50" value={t.days} onChange={(e) => editTaskDays(t.id, e.target.value)} />
               </div>
-              <div className="w-32">{displayFmt(t.start)}</div>
-              <div className="w-32">{displayFmt(t.end)}</div>
-              <div className="w-24"><Button className={'p-3 ' + (tasks.length === 1 ? 'disabled' : 'bg-red-300')} onClick={() => deleteTask(t.id)}>削除</Button></div>
+              <div className="w-1/8">{displayFmt(t.start)}</div>
+              <div className="w-1/8">{displayFmt(t.end)}</div>
+              <div className="w-1/8"><Button className={'p-3 ' + (tasks.length === 1 ? 'disabled' : 'bg-red-300')} onClick={() => deleteTask(t.id)}>削除</Button></div>
             </div>
           ))}
           <div className="flex justify-center item-center">

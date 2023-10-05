@@ -10,14 +10,14 @@ import { generateRand } from '@/utils/number'
 import { UserRestDaysSetting, UserRestDays } from '@/components/UserRestDaysSetting'
 import { DataControl } from '@/components/DataControl'
 import { StartDateSetting } from '@/components/StartDateSetting'
-import { TaskEdit,  Task } from '@/components/TaskEdit'
+import { TaskEdit, Task } from '@/components/TaskEdit'
 
 const CalendarManHours = () => {
   const [value, change] = useState<Value>(new Date())
   const [startDate, changeStartDate] = usePersistState<Value>({ key: 'startDate', initialValue: new Date(new Date().toDateString()) }) // 0時にする
   const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: 'isRestWeekend', initialValue: true })
   const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday()
-  const [userRestDays, setUserRestDays] = usePersistState<UserRestDays>({ key: 'userRestDays', initialValue: {}})
+  const [userRestDays, setUserRestDays] = usePersistState<UserRestDays>({ key: 'userRestDays', initialValue: {} })
   const [tasks, changeTasks] = usePersistState<Task[]>({
     key: 'tasks',
     initialValue: [
@@ -54,7 +54,7 @@ const CalendarManHours = () => {
     return false
   }
 
-  const updateTasks = (newTasks?:Task[]) => {
+  const updateTasks = (newTasks?: Task[]) => {
     console.log('tasksが更新されました')
     let start = new Date(startDate as Date)
     let end = new Date(startDate as Date)
@@ -62,7 +62,7 @@ const CalendarManHours = () => {
     for (const task of (newTasks || tasks)) {
       // restDaysに含まれている日はスキップする
       for (let i = 0; i < task.days; i++) {
-        console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
+        console.log(task.name + 'の' + (i + 1) + '日目' + fmt(end))
         console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
         while (true) {
           if (!isRestDay(fmt(end))) {
@@ -75,7 +75,7 @@ const CalendarManHours = () => {
         // (次のループのため)はendを進める
         i !== task.days - 1 && end.setDate(end.getDate() + 1)
       }
-      result.push({...task, start: new Date(start), end: new Date(end)})
+      result.push({ ...task, start: new Date(start), end: new Date(end) })
       // 開始日を1日進め、終了日を開始日と同じにする
       if (task.days === 0) {
         console.log(task.name + 'の日数が0なのでスキップしますs')
@@ -100,7 +100,7 @@ const CalendarManHours = () => {
   }, [startDate, isRestWeekend, isRestHoliday, userRestDays])
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen py-2 max-w-4xl mx-auto">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 mx-auto">
       <div className="grid grid-cols-2 gap-4 p-2 items-center text-center w-96">
         <span className="text-lg font-bold">開始日</span>
         <StartDateSetting className="w-full" startDate={startDate} changeStartDate={changeStartDate} />
@@ -108,7 +108,7 @@ const CalendarManHours = () => {
         <div className="flex justify-between items-center mx-2 w-full gap-4">
           {['はい', 'いいえ'].map((label, i) => (
             <div className="flex-1">
-              <input id={`isRestWeekend${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestWeekend" value={String(i === 0)} checked={isRestWeekend === (i === 0)} onChange={() => setIsRestWeekend(i === 0)}/>
+              <input id={`isRestWeekend${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestWeekend" value={String(i === 0)} checked={isRestWeekend === (i === 0)} onChange={() => setIsRestWeekend(i === 0)} />
               <label htmlFor={`isRestWeekend${i}`} className="block cursor-pointer border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-blue-500">{label}
               </label>
             </div>
@@ -118,7 +118,7 @@ const CalendarManHours = () => {
         <div className="flex justify-between items-center mx-2 w-full gap-4">
           {['はい', 'いいえ'].map((label, i) => (
             <div className="flex-1">
-              <input id={`isRestHoliday${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestHoliday" value={String(i === 0)} checked={isRestHoliday === (i === 0)} onChange={() => setIsRestHoliday(i === 0)}/>
+              <input id={`isRestHoliday${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestHoliday" value={String(i === 0)} checked={isRestHoliday === (i === 0)} onChange={() => setIsRestHoliday(i === 0)} />
               <label htmlFor={`isRestHoliday${i}`} className="block cursor-pointer border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-blue-500">{label}
               </label>
             </div>
@@ -138,16 +138,16 @@ const CalendarManHours = () => {
         value={value}
         tileContent={({ date, view }) =>
           <div className="date-box">
-            { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
-            { view === 'month' && tasks.map((t) => {
+            {view === 'month' && rawHolidays[fmt(date)] && <p style={{ 'color': 'red' }}>{rawHolidays[fmt(date)]}</p>}
+            {view === 'month' && tasks.map((t) => {
               // タスク名
               if (!isRestDay(fmt(date)) && t.start <= date && date <= t.end && t.days > 0) {
                 return <p style={{ 'fontSize': 7 }}>{t.name}</p>
               }
             })}
-            { view === 'month' && isRestWeekend && isWeekend(fmt(date)) && <p>🛌💤</p> }
-            { view === 'month' && isRestHoliday && holidays.includes(fmt(date)) && <p>🇯🇵</p> }
-            { view === 'month' && userRestDays[fmt(date)] && <p>😑💤</p> }
+            {view === 'month' && isRestWeekend && isWeekend(fmt(date)) && <p>🛌💤</p>}
+            {view === 'month' && isRestHoliday && holidays.includes(fmt(date)) && <p>🇯🇵</p>}
+            {view === 'month' && userRestDays[fmt(date)] && <p>😑💤</p>}
           </div>
         }
       />
@@ -158,7 +158,7 @@ const CalendarManHours = () => {
           <DataControl className="mt-2" />
         </div>
       </div>
-    </main>
+    </div>
   )
 }
 export default (() => {
