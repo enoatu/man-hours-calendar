@@ -92,56 +92,6 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
           ))}
         </div>
       </div>
-      <style jsx>{`
-        .task-item {
-          display: flex;
-          background-color: #fff;
-          justify-content: flex-start;
-          align-items: center;
-          padding: 0 10px;
-          box-sizing: border-box;
-          width: 110px;
-          overflow: hidden;
-          flex: 3;
-        }
-        .task-item:nth-child(1) {
-          flex: 10;
-        }
-        .task-item:nth-child(1) input {
-          padding: 6px;
-          width: 100%;
-          background-color: rgba(207, 240, 240, 0.5);
-        }
-        .task-item:nth-child(2) {
-          flex: 3;
-        }
-        .task-item:nth-child(2) input {
-          padding: 6px;
-          width: 100%;
-          text-align: right;
-          background-color: rgba(207, 240, 240, 0.5);
-        }
-
-        .task-item:nth-child(5) {
-          flex: 1;
-          font-size: 30px;
-          cursor: move;
-          color: #ddd;
-          padding-bottom: 5px;
-        }
-        .task-header.task-item:nth-child(5) {
-          font-size: 16px;
-          color: #000;
-        }
-        .task-item:nth-child(6) {
-          flex: 1;
-          text-align: center;
-        }
-        .disable-delete-btn {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-      `}</style>
     </div>
   )
 }

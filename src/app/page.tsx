@@ -105,9 +105,9 @@ const CalendarManHours = () => {
         <span className="text-lg font-bold">開始日</span>
         <StartDateSetting className="w-full" startDate={startDate} changeStartDate={changeStartDate} />
         <span className="text-lg font-bold">土日を休みとする</span>
-        <div className="flex justify-between items-center mx-2 w-full gap-4">
+        <div className="flex justify-between items-center w-full gap-4">
           {['はい', 'いいえ'].map((label, i) => (
-            <div className="flex-1">
+            <div className="flex-1" key={i}>
               <input id={`isRestWeekend${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestWeekend" value={String(i === 0)} checked={isRestWeekend === (i === 0)} onChange={() => setIsRestWeekend(i === 0)} />
               <label htmlFor={`isRestWeekend${i}`} className="block cursor-pointer border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-blue-500">{label}
               </label>
@@ -115,9 +115,9 @@ const CalendarManHours = () => {
           ))}
         </div>
         <span className="text-lg font-bold">祝日を休みとする</span>
-        <div className="flex justify-between items-center mx-2 w-full gap-4">
+        <div className="flex justify-between items-center w-full gap-4">
           {['はい', 'いいえ'].map((label, i) => (
-            <div className="flex-1">
+            <div className="flex-1" key={i}>
               <input id={`isRestHoliday${i}`} className="peer hidden [&:checked_+_label]:block" type="radio" name="isRestHoliday" value={String(i === 0)} checked={isRestHoliday === (i === 0)} onChange={() => setIsRestHoliday(i === 0)} />
               <label htmlFor={`isRestHoliday${i}`} className="block cursor-pointer border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-blue-500">{label}
               </label>
@@ -139,10 +139,10 @@ const CalendarManHours = () => {
         tileContent={({ date, view }) =>
           <div className="date-box">
             {view === 'month' && rawHolidays[fmt(date)] && <p style={{ 'color': 'red' }}>{rawHolidays[fmt(date)]}</p>}
-            {view === 'month' && tasks.map((t) => {
+            {view === 'month' && tasks.map((t, i) => {
               // タスク名
               if (!isRestDay(fmt(date)) && t.start <= date && date <= t.end && t.days > 0) {
-                return <p style={{ 'fontSize': 7 }}>{t.name}</p>
+                return <p key={i} style={{ 'fontSize': 7 }}>{t.name}</p>
               }
             })}
             {view === 'month' && isRestWeekend && isWeekend(fmt(date)) && <p>🛌💤</p>}
@@ -161,10 +161,11 @@ const CalendarManHours = () => {
     </div>
   )
 }
-export default (() => {
+const Main = () => {
   const [isClient, setIsClient] = useState(false)
   useEffect(() => {
     setIsClient(true)
   }, [])
   return isClient ? <CalendarManHours /> : null
-})
+}
+export default Main
