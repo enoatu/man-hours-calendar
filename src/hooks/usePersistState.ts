@@ -9,9 +9,7 @@ type Props<T> = {
 type Result<T> = readonly [T, (v: T) => void];
 
 export const usePersistState = <T>({ key, initialValue }: Props<T>): Result<T> => {
-  if (typeof window === "undefined") {
-    return [initialValue, () => {}] as const;
-  }
+  "use client";
   const cast = (key: string, value: T): T => {
     switch (key) {
       case "startDate":

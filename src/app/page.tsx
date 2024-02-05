@@ -100,7 +100,7 @@ const CalendarManHours = () => {
   }, [startDate, isRestWeekend, isRestHoliday, userRestDays])
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 mx-auto">
+    <div className="flex flex-col items-center justify-center min-h-screen p-2 mx-auto">
       <div className="grid grid-cols-2 gap-4 p-2 items-center text-center w-96">
         <span className="text-lg font-bold">開始日</span>
         <StartDateSetting className="w-full" startDate={startDate} changeStartDate={changeStartDate} />
