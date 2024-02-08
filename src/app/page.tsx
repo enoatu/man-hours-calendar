@@ -11,6 +11,7 @@ import { UserRestDaysSetting, UserRestDays } from '@/components/UserRestDaysSett
 import { DataControl } from '@/components/DataControl'
 import { StartDateSetting } from '@/components/StartDateSetting'
 import { TaskEdit, Task } from '@/components/TaskEdit'
+import { GoogleAuth } from '@/components/GoogleAuth'
 
 const CalendarManHours = () => {
   const [value, change] = useState<Value>(new Date())
@@ -166,6 +167,11 @@ const Main = () => {
   useEffect(() => {
     setIsClient(true)
   }, [])
-  return isClient ? <CalendarManHours /> : null
+  const node = isClient ? <CalendarManHours /> : null
+  return (
+    <GoogleAuth>
+      {node}
+    </GoogleAuth>
+  )
 }
 export default Main

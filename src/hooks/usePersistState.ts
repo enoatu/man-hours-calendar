@@ -6,6 +6,24 @@ type Props<T> = {
     type?: string;
 };
 
+const obj: Record<string, any> = {}
+const isNoLocalStorage = false
+
+const set = (key: string, value: any) => {
+  if (isNoLocalStorage) {
+    obj[key] = value;
+  } else {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+}
+
+const get = (key: string) => {
+  if (isNoLocalStorage) {
+    return obj[key]
+  }
+  return JSON.parse(localStorage.getItem(key) + "");
+};
+
 type Result<T> = readonly [T, (v: T) => void];
 
 export const usePersistState = <T>({ key, initialValue }: Props<T>): Result<T> => {
@@ -34,11 +52,11 @@ export const usePersistState = <T>({ key, initialValue }: Props<T>): Result<T> =
   }
   const getItemFromStorage = <T>(key: string, defaultValue?: T) => {
     try {
-      const val = JSON.parse(localStorage.getItem(key) + "");
+      const val = get(key);
       if (val !== null) {
         return cast(key, val);
       }
-      localStorage.setItem(key, JSON.stringify(defaultValue));
+      set(key, defaultValue);
       return defaultValue;
     } catch {
       return defaultValue;
@@ -49,7 +67,7 @@ export const usePersistState = <T>({ key, initialValue }: Props<T>): Result<T> =
 
   const setValue = useCallback(
     (value: T) => {
-      localStorage.setItem(key, JSON.stringify(value));
+      set(key, value);
       setState(value);
     },
     [key]

@@ -1,5 +1,11 @@
 import React from 'react'
 import { Button } from '@/components/Button'
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { firebaseApp } from '@/utils/firebase'
+import { GoogleAuthData } from '@/components/GoogleAuth'
+
+const db = getFirestore(firebaseApp);
 
 type DataControlProps = {
   className?: string,
@@ -13,6 +19,37 @@ export const DataControl = ({ className }: DataControlProps) => {
     'userRestDays',
     'tasks',
   ]
+
+  const exportCloudStorages = async () => {
+    if (!window.confirm('クラウドにデータを保存しますか？')) {
+      return
+    }
+    const result: { [key: string]: any } = {}
+    for (const key of importData) {
+      result[key] = JSON.parse(localStorage.getItem(key) as string)
+    }
+    const data = JSON.parse(localStorage.getItem('googleAuth') as string) as GoogleAuthData
+    await setDoc(doc(db, data.uid, "data"), result)
+  }
+
+  const importCloudStorages = async () => {
+    if (!window.confirm('クラウドのデータで上書きしますか？')) {
+      return
+    }
+    const data = JSON.parse(localStorage.getItem('googleAuth') as string) as GoogleAuthData
+    const docRef = doc(db, data.uid, "data")
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      const result = docSnap.data()
+      for (const key of importData) {
+        localStorage.setItem(key, JSON.stringify(result[key]))
+      }
+      location.reload()
+    } else {
+      console.log("No such document!")
+    }
+  }
+
   const exportLocalStorages = () => {
     const result: { [key: string]: any } = {}
     for (const key of importData) {
@@ -45,9 +82,13 @@ export const DataControl = ({ className }: DataControlProps) => {
 
   return (
     <div className={"grid grid-cols-2 gap-4 p-4 bg-gray-100 " + className}>
-      <span>エクスポート</span>
+      <span>クラウドにデータを保存</span>
+      <Button className="w-full bg-white" onClick={exportCloudStorages}>実行</Button>
+      <span>クラウドからデータをインポート</span>
+      <Button className="w-full bg-white" onClick={importCloudStorages}>実行</Button>
+      <span>JSONファイルエクスポート</span>
       <Button className="w-full bg-white" onClick={exportLocalStorages}>実行</Button>
-      <span>インポート</span>
+      <span>JSONファイルインポート</span>
       <input type="file" onChange={importLocalStorages} />
       <span>リセット</span>
       <Button className="w-full bg-white" onClick={() => {
