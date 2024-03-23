@@ -1,16 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { usePersistState } from "@/hooks/usePersistState";
-import { useHoliday } from "@/hooks/useHoliday";
+import { useEffect, useState } from "react";
+
 import Calendar from "react-calendar";
-import { Value } from "@/types/calendar";
-import { fmt } from "@/utils/date";
-import { generateRand } from "@/utils/number";
-import { UserRestDaysSetting, UserRestDays } from "@/components/UserRestDaysSetting";
+
 import { DataControl } from "@/components/DataControl";
 import { StartDateSetting } from "@/components/StartDateSetting";
-import { TaskEdit, Task } from "@/components/TaskEdit";
+import { Task, TaskEdit } from "@/components/TaskEdit";
+import { UserRestDays, UserRestDaysSetting } from "@/components/UserRestDaysSetting";
+
+import { useHoliday } from "@/hooks/useHoliday";
+import { usePersistState } from "@/hooks/usePersistState";
+
+import { fmt } from "@/utils/date";
+import { generateRand } from "@/utils/number";
+
+import { Value } from "@/types/calendar";
 
 const CalendarManHours = () => {
   const [value, change] = useState<Value>(new Date());
@@ -18,7 +23,7 @@ const CalendarManHours = () => {
     key: "startDate",
     initialValue: new Date(new Date().toDateString())
   }); // 0時にする
-  const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: "isRestWeekend", initialValue: true });
+  const [isRestWeekend, setIsRestWeekend] = usePersistState<boolean>({ key: "isRestWeekend", initialValue: true });
   const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday();
   const [userRestDays, setUserRestDays] = usePersistState<UserRestDays>({ key: "userRestDays", initialValue: {} });
   const [tasks, changeTasks] = usePersistState<Task[]>({
