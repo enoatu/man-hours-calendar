@@ -64,7 +64,6 @@ const CalendarManHours = () => {
     for (const task of newTasks || tasks) {
       // restDaysに含まれている日はスキップする
       for (let i = 0; i < task.days; i++) {
-        // eslint-disable-next-line no-constant-condition
         while (true) {
           if (!isRestDay(fmt(end))) {
             break;
