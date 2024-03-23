@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd .precommit-exec && yarn lint-staged -x --allow-empty

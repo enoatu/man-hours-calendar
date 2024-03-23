@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "build": "rsync -a --delete --exclude '.git/' --exclude 'node_modules/' . /tmp/precommit-exec && cd /tmp && sed '3d' precommit-exec/package.json && zip -r precommit-exec-v1.0.0.zip precommit-exec",
+    "prepare": "cd .. && husky install .precommit-exec/.husky",
+    "lint-staged": "lint-staged",
+    "eslint": "eslint",
+    "prettier": "prettier"
+  },
+  "devDependencies": {
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.8.8",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0"
+  }
+}

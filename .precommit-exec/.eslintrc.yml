@@ -1,0 +1,17 @@
+env:
+  browser: true
+  es2021: true
+  node: true
+extends:
+  - "eslint:recommended"
+  - "prettier"
+parserOptions:
+  ecmaVersion: 13
+rules:
+  quotes:
+    - error
+    - double
+  no-constant-condition: 0
+  prefer-const: 'error'
+globals:
+  versions: true
