@@ -72,20 +72,35 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
     kind: "Plain" | "Redmine" | "GROWI";
   };
   const displayForPaste = ({ kind }: DisplayForPasteProps) => {
+    let normalIndent = "";
     let parentIndent = "";
     let childIndent = "";
     switch (kind) {
       case "Plain":
-        childIndent = "*";
         break;
       case "Redmine":
-        parentIndent = "*";
-        childIndent = "**";
+        normalIndent = "* ";
+        parentIndent = "* ";
+        childIndent = "** ";
         break;
       case "GROWI":
-        parentIndent = "###";
-        childIndent = "*";
+        normalIndent = "* ";
+        parentIndent = "### ";
+        childIndent = "* ";
         break;
+    }
+    const hasParent = tasks.some((t) => t.name.startsWith("==="));
+    if (!hasParent) {
+      return (
+        <div>
+          {tasks.map((t) => (
+            <div key={t.id} className="task-item-wrapper">
+              {normalIndent}
+              {t.name} {displayFmtTrimYear(t.start) + "〜" + displayFmtTrimYear(t.end)}
+            </div>
+          ))}
+        </div>
+      );
     }
     return (
       <div>
@@ -107,14 +122,15 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
             }
             return (
               <div key={t.id} className="task-item-wrapper">
-                {parentIndent} {displayFmtTrimYear(t.start)}〜{endDate} {t.name.replaceAll("===", "")}
+                {parentIndent}
+                {displayFmtTrimYear(t.start)}〜{endDate} {t.name.replaceAll("===", "")}
               </div>
             );
           }
           return (
             <div key={t.id} className="task-item-wrapper">
-              {childIndent} {t.name}{" "}
-              {kind === "Plain" ? "" : displayFmtTrimYear(t.start) + "〜" + displayFmtTrimYear(t.end)}
+              {childIndent}
+              {t.name} {kind === "Plain" ? displayFmtTrimYear(t.start) + "〜" + displayFmtTrimYear(t.end) : ""}
             </div>
           );
         })}
@@ -180,10 +196,10 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
           ※プレーンテキスト コピペ用
           {displayForPaste({ kind: "Plain" })}
           <br />
-          ※Redmine コピペ用
+          ※Redmine コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
           {displayForPaste({ kind: "Redmine" })}
           <br />
-          ※GROWI コピペ用
+          ※GROWI コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
           {displayForPaste({ kind: "GROWI" })}
         </div>
       </div>
