@@ -7,6 +7,7 @@ import Calendar from "react-calendar";
 import { DataControl } from "@/components/DataControl";
 import { StartDateSetting } from "@/components/StartDateSetting";
 import { Task, TaskEdit } from "@/components/TaskEdit";
+import { TaskVariableFormats } from "@/components/TaskVariableFormats";
 import { UserRestDays, UserRestDaysSetting } from "@/components/UserRestDaysSetting";
 
 import { useHoliday } from "@/hooks/useHoliday";
@@ -159,7 +160,6 @@ const CalendarManHours = () => {
           rawHolidays={rawHolidays}
         />
       </div>
-      <TaskEdit tasks={tasks} updateTasks={updateTasks} />
       <Calendar
         onChange={change}
         value={value}
@@ -183,6 +183,7 @@ const CalendarManHours = () => {
           </div>
         )}
       />
+      <TaskEdit tasks={tasks} updateTasks={updateTasks} />
       <hr />
       <div>
         <div className="mt-8 max-w-2xl">
@@ -190,6 +191,7 @@ const CalendarManHours = () => {
           <DataControl className="mt-2" />
         </div>
       </div>
+      <TaskVariableFormats tasks={tasks} />
     </div>
   );
 };
