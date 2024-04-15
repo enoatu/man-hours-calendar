@@ -4,7 +4,7 @@ import { ReactSortable } from "react-sortablejs";
 
 import { Button } from "@/components/Button";
 
-import { displayFmt } from "@/utils/date";
+import { displayFmtTrimYear } from "@/utils/date";
 import { generateRand } from "@/utils/number";
 
 export type Task = {
@@ -100,8 +100,17 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
                 value={t.days}
                 onChange={(e) => editTaskDays(t.id, e.target.value)}
               />
-              <div className="col-span-2">{displayFmt(t.start)}</div>
-              <div className="col-span-2">{displayFmt(t.end)}</div>
+              {t.start <= new Date() && new Date() <= t.end ? (
+                <>
+                  <div className="col-span-2 outline outline-yellow-200">{displayFmtTrimYear(t.start)}</div>
+                  <div className="col-span-2 outline outline-yellow-200">{displayFmtTrimYear(t.end)}</div>
+                </>
+              ) : (
+                <>
+                  <div className="col-span-2">{displayFmtTrimYear(t.start)}</div>
+                  <div className="col-span-2">{displayFmtTrimYear(t.end)}</div>
+                </>
+              )}
               <div className="col-span-1">
                 <Button
                   className={"p-3 " + (tasks.length === 1 ? "disabled" : "bg-red-300")}

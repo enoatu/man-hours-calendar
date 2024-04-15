@@ -2,12 +2,7 @@ import React from "react";
 
 import { Task } from "@/components/TaskEdit";
 
-import { displayFmt } from "@/utils/date";
-
-const displayFmtTrimYear = (date: Date) => {
-  // 5文字削除
-  return displayFmt(date).slice(5);
-};
+import { displayFmtTrimYear } from "@/utils/date";
 
 type DisplayForPasteProps = {
   kind: "Plain" | "Redmine" | "GROWI";
