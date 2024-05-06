@@ -22,7 +22,7 @@ const displayForPaste = (tasks: Task[], { kind }: DisplayForPasteProps) => {
       break;
     case "GROWI":
       normalIndent = "* ";
-      parentIndent = "### ";
+      parentIndent = "#### ";
       childIndent = "* ";
       break;
   }
