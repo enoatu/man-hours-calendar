@@ -5,7 +5,7 @@ import { Task } from "@/components/TaskEdit";
 
 type DisplayForPasteProps = {
   tasks: Task[];
-  kind: "Plain" | "Redmine" | "GROWI";
+  kind: "Plain" | "Redmine" | "Markdown";
   displaySetting: DisplaySettingData;
 };
 
@@ -17,14 +17,14 @@ const DisplayForPaste = ({ tasks, kind, displaySetting }: DisplayForPasteProps) 
     case "Plain":
       break;
     case "Redmine":
-      normalIndent = "* ";
-      parentIndent = "* ";
-      childIndent = "** ";
+      normalIndent = displaySetting.redmineIndentNormal;
+      parentIndent = displaySetting.redmineIndentParent;
+      childIndent = displaySetting.redmineIndentChild;
       break;
-    case "GROWI":
-      normalIndent = "* ";
-      parentIndent = "#### ";
-      childIndent = "* ";
+    case "Markdown":
+      normalIndent = displaySetting.markdownIndentNormal;
+      parentIndent = displaySetting.markdownIndentParent;
+      childIndent = displaySetting.markdownIndentChild;
       break;
   }
   const hasParent = tasks.some((t) => t.name.startsWith("==="));
@@ -34,7 +34,7 @@ const DisplayForPaste = ({ tasks, kind, displaySetting }: DisplayForPasteProps) 
         {tasks.map((t) => (
           <div key={t.id} className="task-item-wrapper">
             {normalIndent}
-            {t.name} <FmtDate date={t.start} displaySetting={displaySetting} />〜
+            {t.name.trim()} <FmtDate date={t.start} displaySetting={displaySetting} />〜
             <FmtDate date={t.end} displaySetting={displaySetting} />
           </div>
         ))}
@@ -61,16 +61,18 @@ const DisplayForPaste = ({ tasks, kind, displaySetting }: DisplayForPasteProps) 
           }
           return (
             <div key={t.id} className="task-item-wrapper">
+              {displaySetting.isAddParentBlankLine && <br />}
               {parentIndent}
               <FmtDate date={t.start} displaySetting={displaySetting} />〜
-              <FmtDate date={endDate} displaySetting={displaySetting} /> {t.name.replaceAll("===", "")}
+              <FmtDate date={endDate} displaySetting={displaySetting} />{" "}
+              {displaySetting.isDisplayParentTitle && t.name.replaceAll("===", "").trim()}
             </div>
           );
         }
         return (
           <div key={t.id} className="task-item-wrapper">
             {childIndent}
-            {t.name}{" "}
+            {t.name.trim()}{" "}
             {kind === "Plain" ? (
               <>
                 <FmtDate date={t.start} displaySetting={displaySetting} />〜
@@ -84,20 +86,25 @@ const DisplayForPaste = ({ tasks, kind, displaySetting }: DisplayForPasteProps) 
   );
 };
 type TaskVariableFormatsProps = {
+  className?: string;
   tasks: Task[];
   displaySetting: DisplaySettingData;
 };
-export const TaskVariableFormats = ({ tasks, displaySetting }: TaskVariableFormatsProps) => {
+export const TaskVariableFormats = ({ className, tasks, displaySetting }: TaskVariableFormatsProps) => {
   return (
-    <div>
-      ※プレーンテキスト コピペ用
-      <DisplayForPaste tasks={tasks} kind="Plain" displaySetting={displaySetting} />
-      <br />
-      ※Redmine コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
-      <DisplayForPaste tasks={tasks} kind="Redmine" displaySetting={displaySetting} />
-      <br />
-      ※GROWI コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
-      <DisplayForPaste tasks={tasks} kind="GROWI" displaySetting={displaySetting} />
+    <div className={className}>
+      <div className="bg-blue-100">
+        ※プレーンテキスト コピペ用
+        <DisplayForPaste tasks={tasks} kind="Plain" displaySetting={displaySetting} />
+      </div>
+      <div className="bg-red-100">
+        ※Redmine コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
+        <DisplayForPaste tasks={tasks} kind="Redmine" displaySetting={displaySetting} />
+      </div>
+      <div className="bg-green-100">
+        ※マークダウン コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
+        <DisplayForPaste tasks={tasks} kind="Markdown" displaySetting={displaySetting} />
+      </div>
     </div>
   );
 };

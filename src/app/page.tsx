@@ -48,6 +48,27 @@ const CalendarManHours = () => {
         days: 5,
         start: new Date(),
         end: new Date()
+      },
+      {
+        id: generateRand(),
+        name: "===振り返り",
+        days: 0,
+        start: new Date(),
+        end: new Date()
+      },
+      {
+        id: generateRand(),
+        name: "まとめる",
+        days: 5,
+        start: new Date(),
+        end: new Date()
+      },
+      {
+        id: generateRand(),
+        name: "発表する",
+        days: 5,
+        start: new Date(),
+        end: new Date()
       }
     ]
   });
@@ -188,17 +209,22 @@ const CalendarManHours = () => {
           </div>
         )}
       />
-      <TaskEdit tasks={tasks} updateTasks={updateTasks} displaySetting={displaySetting} />
+      <TaskEdit tasks={tasks} updateTasks={updateTasks} />
       <hr />
       <div>
         <div className="mt-8 max-w-2xl">
-          <h2 className="text-lg font-bold">表示設定</h2>
+          <h2 className="text-lg font-bold">設定</h2>
           <DisplaySetting className="mt-2" displaySetting={displaySetting} setDisplaySetting={setDisplaySetting} />
+        </div>
+        <div className="mt-8 max-w-2xl">
           <h2 className="text-lg font-bold">データ管理</h2>
           <DataControl className="mt-2" />
         </div>
+        <div className="mt-8 max-w-2xl">
+          <h2 className="text-lg font-bold">コピペ用</h2>
+          <TaskVariableFormats tasks={tasks} displaySetting={displaySetting} />
+        </div>
       </div>
-      <TaskVariableFormats tasks={tasks} displaySetting={displaySetting} />
     </div>
   );
 };

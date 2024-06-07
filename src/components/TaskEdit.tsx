@@ -3,8 +3,8 @@ import React from "react";
 import { ReactSortable } from "react-sortablejs";
 
 import { Button } from "@/components/Button";
-import { DisplaySettingData, FmtDate } from "@/components/DisplaySetting";
 
+import { fmtDate } from "@/utils/date";
 import { generateRand } from "@/utils/number";
 
 export type Task = {
@@ -17,10 +17,9 @@ export type Task = {
 export type TaskEditProps = {
   tasks: Task[];
   updateTasks: (arg: Task[]) => void;
-  displaySetting: DisplaySettingData;
 };
 
-export const TaskEdit = ({ tasks, updateTasks, displaySetting }: TaskEditProps) => {
+export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
   const editTaskName = (id: number, name: string) => {
     const newTasks = tasks.map((task) => {
       if (task.id === id) {
@@ -67,6 +66,7 @@ export const TaskEdit = ({ tasks, updateTasks, displaySetting }: TaskEditProps) 
   return (
     <div className="m-4 w-full">
       <div className="flex text-center items-center border grid grid-cols-11 gap-4">
+        <div className="col-span-1"></div>
         <div className="col-span-4">タスク名</div>
         <div className="col-span-1">かかる日数</div>
         <div className="col-span-2">
@@ -84,12 +84,12 @@ export const TaskEdit = ({ tasks, updateTasks, displaySetting }: TaskEditProps) 
           </span>
         </div>
         <div className="col-span-1">編集</div>
-        <div className="col-span-1">並び替え</div>
       </div>
       <div className="border flex flex-col">
         <ReactSortable list={tasks} setList={(c) => updateTasks(c)} handle=".js-drag-handle">
           {tasks.map((t) => (
             <div key={t.id} className="flex text-center items-center grid grid-cols-11 gap-4">
+              <div className="col-span-1 w-full p-3 cursor-move js-drag-handle">☰</div>
               <input
                 type="text"
                 className="w-full p-3 bg-sky-50 col-span-4"
@@ -104,21 +104,13 @@ export const TaskEdit = ({ tasks, updateTasks, displaySetting }: TaskEditProps) 
               />
               {t.start <= new Date() && new Date() <= t.end ? (
                 <>
-                  <div className="col-span-2 outline outline-yellow-200">
-                    <FmtDate date={t.start} displaySetting={displaySetting} />
-                  </div>
-                  <div className="col-span-2 outline outline-yellow-200">
-                    <FmtDate date={t.end} displaySetting={displaySetting} />
-                  </div>
+                  <div className="col-span-2 outline outline-yellow-200">{fmtDate(t.start)}</div>
+                  <div className="col-span-2 outline outline-yellow-200">{fmtDate(t.end)}</div>
                 </>
               ) : (
                 <>
-                  <div className="col-span-2">
-                    <FmtDate date={t.start} displaySetting={displaySetting} />
-                  </div>
-                  <div className="col-span-2">
-                    <FmtDate date={t.end} displaySetting={displaySetting} />
-                  </div>
+                  <div className="col-span-2">{fmtDate(t.start)}</div>
+                  <div className="col-span-2">{fmtDate(t.end)}</div>
                 </>
               )}
               <div className="col-span-1">
@@ -129,7 +121,6 @@ export const TaskEdit = ({ tasks, updateTasks, displaySetting }: TaskEditProps) 
                   削除
                 </Button>
               </div>
-              <div className="col-span-1 cursor-move js-drag-handle">☰</div>
             </div>
           ))}
           <div className="flex justify-center item-center">
