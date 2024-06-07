@@ -47,7 +47,7 @@ export type DisplaySettingProps = {
 export const DisplaySetting = ({ className, displaySetting, setDisplaySetting }: DisplaySettingProps) => {
   return (
     <>
-      <div className={className}>
+      <div className={"grid grid-cols-1 gap-4 p-4 bg-gray-100 " + className}>
         <div className="grid grid-cols-2">
           <span>曜日を表示</span>
           <SwitchCheckbox

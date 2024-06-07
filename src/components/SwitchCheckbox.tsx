@@ -7,7 +7,7 @@ export type SwitchCheckboxProps = {
 
 export const SwitchCheckbox = ({ value, onChange }: SwitchCheckboxProps) => (
   <div>
-    <label className="flex items-center cursor-pointer">
+    <label className="flex items-center cursor-pointer justify-center">
       <input type="checkbox" className="hidden" checked={value} onChange={onChange} />
       <div className="relative">
         {value ? (
