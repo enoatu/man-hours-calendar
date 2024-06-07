@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 
 import { DataControl } from "@/components/DataControl";
+import { DisplaySetting, DisplaySettingData, displaySettingInitialData } from "@/components/DisplaySetting";
 import { StartDateSetting } from "@/components/StartDateSetting";
 import { Task, TaskEdit } from "@/components/TaskEdit";
 import { TaskVariableFormats } from "@/components/TaskVariableFormats";
@@ -27,6 +28,10 @@ const CalendarManHours = () => {
   const [isRestWeekend, setIsRestWeekend] = usePersistState<boolean>({ key: "isRestWeekend", initialValue: true });
   const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday();
   const [userRestDays, setUserRestDays] = usePersistState<UserRestDays>({ key: "userRestDays", initialValue: {} });
+  const [displaySetting, setDisplaySetting] = usePersistState<DisplaySettingData>({
+    key: "displaySettingData",
+    initialValue: displaySettingInitialData
+  });
   const [tasks, changeTasks] = usePersistState<Task[]>({
     key: "tasks",
     initialValue: [
@@ -183,15 +188,17 @@ const CalendarManHours = () => {
           </div>
         )}
       />
-      <TaskEdit tasks={tasks} updateTasks={updateTasks} />
+      <TaskEdit tasks={tasks} updateTasks={updateTasks} displaySetting={displaySetting} />
       <hr />
       <div>
         <div className="mt-8 max-w-2xl">
+          <h2 className="text-lg font-bold">表示設定</h2>
+          <DisplaySetting className="mt-2" displaySetting={displaySetting} setDisplaySetting={setDisplaySetting} />
           <h2 className="text-lg font-bold">データ管理</h2>
           <DataControl className="mt-2" />
         </div>
       </div>
-      <TaskVariableFormats tasks={tasks} />
+      <TaskVariableFormats tasks={tasks} displaySetting={displaySetting} />
     </div>
   );
 };

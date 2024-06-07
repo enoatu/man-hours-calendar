@@ -1,14 +1,15 @@
 import React from "react";
 
+import { DisplaySettingData, FmtDate } from "@/components/DisplaySetting";
 import { Task } from "@/components/TaskEdit";
 
-import { displayFmtTrimYear } from "@/utils/date";
-
 type DisplayForPasteProps = {
+  tasks: Task[];
   kind: "Plain" | "Redmine" | "GROWI";
+  displaySetting: DisplaySettingData;
 };
 
-const displayForPaste = (tasks: Task[], { kind }: DisplayForPasteProps) => {
+const DisplayForPaste = ({ tasks, kind, displaySetting }: DisplayForPasteProps) => {
   let normalIndent = "";
   let parentIndent = "";
   let childIndent = "";
@@ -33,7 +34,8 @@ const displayForPaste = (tasks: Task[], { kind }: DisplayForPasteProps) => {
         {tasks.map((t) => (
           <div key={t.id} className="task-item-wrapper">
             {normalIndent}
-            {t.name} {displayFmtTrimYear(t.start) + "〜" + displayFmtTrimYear(t.end)}
+            {t.name} <FmtDate date={t.start} displaySetting={displaySetting} />〜
+            <FmtDate date={t.end} displaySetting={displaySetting} />
           </div>
         ))}
       </div>
@@ -50,24 +52,31 @@ const displayForPaste = (tasks: Task[], { kind }: DisplayForPasteProps) => {
             return null;
           }
           // 子タスクの一番最後の日付を取得する
-          let endDate = "";
+          let endDate = null;
           for (let i = parentIndex + 1; i < tasks.length; i++) {
             if (tasks[i].name.startsWith("===")) {
               break;
             }
-            endDate = displayFmtTrimYear(tasks[i].end);
+            endDate = tasks[i].end;
           }
           return (
             <div key={t.id} className="task-item-wrapper">
               {parentIndent}
-              {displayFmtTrimYear(t.start)}〜{endDate} {t.name.replaceAll("===", "")}
+              <FmtDate date={t.start} displaySetting={displaySetting} />〜
+              <FmtDate date={endDate} displaySetting={displaySetting} /> {t.name.replaceAll("===", "")}
             </div>
           );
         }
         return (
           <div key={t.id} className="task-item-wrapper">
             {childIndent}
-            {t.name} {kind === "Plain" ? displayFmtTrimYear(t.start) + "〜" + displayFmtTrimYear(t.end) : ""}
+            {t.name}{" "}
+            {kind === "Plain" ? (
+              <>
+                <FmtDate date={t.start} displaySetting={displaySetting} />〜
+                <FmtDate date={t.end} displaySetting={displaySetting} />
+              </>
+            ) : null}
           </div>
         );
       })}
@@ -76,18 +85,19 @@ const displayForPaste = (tasks: Task[], { kind }: DisplayForPasteProps) => {
 };
 type TaskVariableFormatsProps = {
   tasks: Task[];
+  displaySetting: DisplaySettingData;
 };
-export const TaskVariableFormats = ({ tasks }: TaskVariableFormatsProps) => {
+export const TaskVariableFormats = ({ tasks, displaySetting }: TaskVariableFormatsProps) => {
   return (
     <div>
       ※プレーンテキスト コピペ用
-      {displayForPaste(tasks, { kind: "Plain" })}
+      <DisplayForPaste tasks={tasks} kind="Plain" displaySetting={displaySetting} />
       <br />
       ※Redmine コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
-      {displayForPaste(tasks, { kind: "Redmine" })}
+      <DisplayForPaste tasks={tasks} kind="Redmine" displaySetting={displaySetting} />
       <br />
       ※GROWI コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
-      {displayForPaste(tasks, { kind: "GROWI" })}
+      <DisplayForPaste tasks={tasks} kind="GROWI" displaySetting={displaySetting} />
     </div>
   );
 };
