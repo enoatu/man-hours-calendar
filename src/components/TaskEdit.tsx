@@ -23,7 +23,11 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
   const editTaskName = (id: number, name: string) => {
     const newTasks = tasks.map((task) => {
       if (task.id === id) {
-        return { ...task, name };
+        if (name.startsWith("===")) {
+          return { ...task, name, days: 0 };
+        } else {
+          return { ...task, name };
+        }
       }
       return task;
     });
@@ -63,6 +67,40 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
     updateTasks(newTasks);
   };
 
+  const parentData = {
+    index: 0,
+    bgColor: "bg-white"
+  };
+  const hasParent = () => parentData.index !== 0;
+
+  const getParentTaskDays = (tasks: Task[], index: number) => {
+    let days = 0;
+    for (let i = index + 1; i < tasks.length; i++) {
+      if (tasks[i].name.startsWith("===")) {
+        break;
+      }
+      days += tasks[i].days;
+    }
+    return days;
+  };
+
+  const getParentTaskStart = (tasks: Task[], index: number) => {
+    // 次の子タスクの開始日、 子タスクがなかったら 自身の開始日
+    return tasks[index + 1]?.start || tasks[index].start;
+  };
+
+  const getParentTaskEnd = (tasks: Task[], index: number) => {
+    // 次の親タスクの開始日の前日
+    const nextParentIndex = tasks.findIndex((t, i) => i > index && t.name.startsWith("==="));
+    if (nextParentIndex === -1) {
+      // 親タスクが見つからなかったら最後のタスクの終了日
+      return tasks[tasks.length - 1].end;
+    }
+    return tasks[nextParentIndex - 1].end;
+  };
+
+  const [isHideSvg, setIsHideSvg] = React.useState(false);
+
   return (
     <div className="m-4 w-full">
       <div className="flex text-center items-center border grid grid-cols-11 gap-4">
@@ -86,43 +124,88 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
         <div className="col-span-1">編集</div>
       </div>
       <div className="border flex flex-col">
-        <ReactSortable list={tasks} setList={(c) => updateTasks(c)} handle=".js-drag-handle">
-          {tasks.map((t) => (
-            <div key={t.id} className="flex text-center items-center grid grid-cols-11 gap-4">
-              <div className="col-span-1 w-full p-3 cursor-move js-drag-handle">☰</div>
-              <input
-                type="text"
-                className="w-full p-3 bg-sky-50 col-span-4"
-                value={t.name}
-                onChange={(e) => editTaskName(t.id, e.target.value)}
-              />
-              <input
-                type="text"
-                className="w-full p-3 bg-sky-50 col-span-1 text-right"
-                value={t.days}
-                onChange={(e) => editTaskDays(t.id, e.target.value)}
-              />
-              {t.start <= new Date() && new Date() <= t.end ? (
-                <>
-                  <div className="col-span-2 outline outline-yellow-200">{fmtDate(t.start)}</div>
-                  <div className="col-span-2 outline outline-yellow-200">{fmtDate(t.end)}</div>
-                </>
-              ) : (
-                <>
-                  <div className="col-span-2">{fmtDate(t.start)}</div>
-                  <div className="col-span-2">{fmtDate(t.end)}</div>
-                </>
-              )}
-              <div className="col-span-1">
-                <Button
-                  className={"p-3 " + (tasks.length === 1 ? "disabled" : "bg-red-300")}
-                  onClick={() => deleteTask(t.id)}
-                >
-                  削除
-                </Button>
+        <style>{`
+          .sortable-chosen svg {
+            display: none;
+          }
+        `}</style>
+        <ReactSortable
+          list={tasks}
+          setList={(c) => updateTasks(c)}
+          handle=".js-drag-handle"
+          onStart={() => setIsHideSvg(true)}
+          onEnd={() => setIsHideSvg(false)}
+        >
+          {tasks.map((t, index) => {
+            const isParent = t.name.startsWith("===");
+            if (isParent) {
+              parentData.index += 1;
+              parentData.bgColor = parentData.index % 2 === 0 ? "bg-blue-100" : "bg-white";
+            }
+            return (
+              <div
+                key={t.id}
+                className={"relative flex text-center items-center grid grid-cols-11 gap-4 " + parentData.bgColor}
+              >
+                <div className="col-span-1 w-full p-3 cursor-move js-drag-handle">☰</div>
+                {!isParent && hasParent() && !isHideSvg && tasks[index - 1]?.name.startsWith("===") && (
+                  <svg className="absolute top-0 left-[11%] w-8 h-[50px] z-0">
+                    <line x1="0" y1={0} x2="0" y2={25} stroke="black" strokeWidth="1" />
+                    <line x1="0" y1={25} x2="100" y2={25} stroke="black" strokeWidth="1" />
+                  </svg>
+                )}
+                {!isParent && hasParent() && !isHideSvg && !tasks[index - 1]?.name.startsWith("===") && (
+                  <svg className="absolute -top-[25px] left-[11%] w-8 h-[75px] z-0">
+                    <line x1="0" y1={0} x2="0" y2={50} stroke="black" strokeWidth="1" />
+                    <line x1="0" y1={50} x2="100" y2={50} stroke="black" strokeWidth="1" />
+                  </svg>
+                )}
+                <input
+                  type="text"
+                  className={
+                    "w-full p-3 bg-sky-50 col-span-4 z-10" + (!isParent && hasParent() ? " max-w-[90%] ml-auto" : "")
+                  }
+                  value={t.name}
+                  onChange={(e) => editTaskName(t.id, e.target.value)}
+                />
+                {!isParent ? (
+                  <>
+                    <input
+                      type="text"
+                      className="w-full p-3 bg-sky-50 col-span-1 text-right"
+                      value={t.days}
+                      onChange={(e) => editTaskDays(t.id, e.target.value)}
+                    />
+                    {t.start <= new Date() && new Date() <= t.end ? (
+                      <>
+                        <div className="col-span-2 outline outline-yellow-200">{fmtDate(t.start)}</div>
+                        <div className="col-span-2 outline outline-yellow-200">{fmtDate(t.end)}</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="col-span-2">{fmtDate(t.start)}</div>
+                        <div className="col-span-2">{fmtDate(t.end)}</div>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div className="col-span-1">計{getParentTaskDays(tasks, index)}</div>
+                    <div className="col-span-2">{fmtDate(getParentTaskStart(tasks, index))}</div>
+                    <div className="col-span-2">{fmtDate(getParentTaskEnd(tasks, index))}</div>
+                  </>
+                )}
+                <div className="col-span-1">
+                  <Button
+                    className={"p-3 whitespace-nowrap " + (tasks.length === 1 ? "disabled" : "bg-red-300")}
+                    onClick={() => deleteTask(t.id)}
+                  >
+                    削除
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           <div className="flex justify-center item-center">
             <Button className="w-full" onClick={() => addTask()}>
               ＋タスクを追加

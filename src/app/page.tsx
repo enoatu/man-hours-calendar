@@ -37,21 +37,7 @@ const CalendarManHours = () => {
     initialValue: [
       {
         id: generateRand(),
-        name: "準備",
-        days: 2,
-        start: new Date(),
-        end: new Date()
-      },
-      {
-        id: generateRand(),
-        name: "実行",
-        days: 5,
-        start: new Date(),
-        end: new Date()
-      },
-      {
-        id: generateRand(),
-        name: "===振り返り",
+        name: "===振り返る",
         days: 0,
         start: new Date(),
         end: new Date()
@@ -59,14 +45,14 @@ const CalendarManHours = () => {
       {
         id: generateRand(),
         name: "まとめる",
-        days: 5,
+        days: 2,
         start: new Date(),
         end: new Date()
       },
       {
         id: generateRand(),
         name: "発表する",
-        days: 5,
+        days: 1,
         start: new Date(),
         end: new Date()
       }

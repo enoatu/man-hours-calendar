@@ -1,11 +1,13 @@
-import './globals.css'
-import Head from 'next/head'
-import { Ga } from '@/components/Ga'
+import Head from "next/head";
+
+import { Ga } from "@/components/Ga";
+
+import "./globals.css";
 
 export const metadata = {
-  title: '工数管理システムMU',
-  description: 'Powered by Next.js, TypeScript, and Tailwind CSS',
-}
+  title: "工数管理システムMU",
+  description: "Powered by Next.js, TypeScript, and Tailwind CSS"
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,14 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </Head>
       <body>
         {/* beautiful h1 */}
-        <header className="w-full flex justify-center align-center bg-primary-100 p-3">
-          <a href="./" rel="noopener noreferrer"  className="bg-white">
+        <header className="w-full flex justify-center align-center bg-blue-100 p-3">
+          <a href="./" rel="noopener noreferrer" className="bg-white">
             <h1 className="m-4 text-4xl font-bold text-center text-primary-800">工数管理システムMU</h1>
           </a>
         </header>
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
         <footer className="w-full flex justify-center align-center">
           <a href="./" rel="noopener noreferrer">
             Powered by <img src="./enoatu.svg" alt="Enoatu Logo" className="w-20" />
@@ -32,5 +32,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </footer>
       </body>
     </html>
-  )
+  );
 }
