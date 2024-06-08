@@ -193,7 +193,15 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
                   </>
                 ) : (
                   <>
-                    <div className="col-span-1">計{getParentTaskDays(tasks, index)}</div>
+                    {t.days !== 0 && (
+                      <p className="bg-red">
+                        親タスク自体のかかる日数が1日以上設定されています。バージョンが異なるためです。再度タイトルを変更して更新してください
+                      </p>
+                    )}
+                    <div className="col-span-1 flex justify-between">
+                      <span className="text-left w-full">計</span>
+                      <span className="pr-3 text-right">{getParentTaskDays(tasks, index)}</span>
+                    </div>
                     <div className="col-span-2">{fmtDate(getParentTaskStart(tasks, index))}</div>
                     <div className="col-span-2">{fmtDate(getParentTaskEnd(tasks, index))}</div>
                   </>

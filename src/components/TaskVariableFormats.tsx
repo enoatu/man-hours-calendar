@@ -93,10 +93,6 @@ type TaskVariableFormatsProps = {
 export const TaskVariableFormats = ({ className, tasks, displaySetting }: TaskVariableFormatsProps) => {
   return (
     <div className={className}>
-      <div className="bg-blue-100">
-        ※プレーンテキスト コピペ用
-        <DisplayForPaste tasks={tasks} kind="Plain" displaySetting={displaySetting} />
-      </div>
       <div className="bg-red-100">
         ※Redmine コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
         <DisplayForPaste tasks={tasks} kind="Redmine" displaySetting={displaySetting} />
@@ -104,6 +100,10 @@ export const TaskVariableFormats = ({ className, tasks, displaySetting }: TaskVa
       <div className="bg-green-100">
         ※マークダウン コピペ用 (親タスク名の先頭に === をつけるとグループ化されます)
         <DisplayForPaste tasks={tasks} kind="Markdown" displaySetting={displaySetting} />
+      </div>
+      <div className="bg-blue-100">
+        ※プレーンテキスト コピペ用
+        <DisplayForPaste tasks={tasks} kind="Plain" displaySetting={displaySetting} />
       </div>
     </div>
   );
