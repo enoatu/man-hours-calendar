@@ -140,7 +140,7 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
             const isParent = t.name.startsWith("===");
             if (isParent) {
               parentData.index += 1;
-              parentData.bgColor = parentData.index % 2 === 0 ? "bg-blue-100" : "bg-white";
+              parentData.bgColor = parentData.index % 2 === 0 ? "bg-gray-100" : "bg-white";
             }
             return (
               <div
@@ -148,17 +148,20 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
                 className={"relative flex text-center items-center grid grid-cols-11 gap-4 " + parentData.bgColor}
               >
                 <div className="col-span-1 w-full p-3 cursor-move js-drag-handle">☰</div>
-                {!isParent && hasParent() && !isHideSvg && tasks[index - 1]?.name.startsWith("===") && (
-                  <svg className="absolute top-0 left-[11%] w-8 h-[50px] z-0">
-                    <line x1="0" y1={0} x2="0" y2={25} stroke="black" strokeWidth="1" />
-                    <line x1="0" y1={25} x2="100" y2={25} stroke="black" strokeWidth="1" />
-                  </svg>
-                )}
-                {!isParent && hasParent() && !isHideSvg && !tasks[index - 1]?.name.startsWith("===") && (
-                  <svg className="absolute -top-[25px] left-[11%] w-8 h-[75px] z-0">
-                    <line x1="0" y1={0} x2="0" y2={50} stroke="black" strokeWidth="1" />
-                    <line x1="0" y1={50} x2="100" y2={50} stroke="black" strokeWidth="1" />
-                  </svg>
+                {!isParent && hasParent() && !isHideSvg && (
+                  <>
+                    {tasks[index - 1]?.name.startsWith("===") ? (
+                      <svg className="absolute top-0 left-[11%] w-8 h-[50px] z-0">
+                        <line x1="0" y1={0} x2="0" y2={25} stroke="black" strokeWidth="1" />
+                        <line x1="0" y1={25} x2="100" y2={25} stroke="black" strokeWidth="1" />
+                      </svg>
+                    ) : (
+                      <svg className="absolute -top-[25px] left-[11%] w-8 h-[75px] z-0">
+                        <line x1="0" y1={0} x2="0" y2={50} stroke="black" strokeWidth="1" />
+                        <line x1="0" y1={50} x2="100" y2={50} stroke="black" strokeWidth="1" />
+                      </svg>
+                    )}
+                  </>
                 )}
                 <input
                   type="text"
