@@ -101,6 +101,15 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
 
   const [isHideSvg, setIsHideSvg] = React.useState(false);
 
+  const isMigrate1Checks = tasks.filter((t) => t.name.startsWith("===") && t.days !== 0);
+  React.useEffect(() => {
+    if (isMigrate1Checks.length > 0) {
+      setTimeout(() => {
+        alert("親タスク自体に「かかる日数」が設定されています。\n日数を0にして、その分を子タスクに分配してください");
+      }, 1000);
+    }
+  }, []);
+
   return (
     <div className="m-4 w-full">
       <div className="flex text-center items-center border grid grid-cols-11 gap-4">
@@ -193,15 +202,20 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
                   </>
                 ) : (
                   <>
-                    {t.days !== 0 && (
-                      <p className="bg-red">
-                        親タスク自体のかかる日数が1日以上設定されています。バージョンが異なるためです。再度タイトルを変更して更新してください
-                      </p>
+                    {isMigrate1Checks.some((x) => x.id === t.id) ? (
+                      <input
+                        type="text"
+                        className="w-full p-3 border border-red-400 col-span-1 bg-sky-50 col-span-1 text-right"
+                        title="親タスク自体にかかる日数が1日以上設定されています。日数を0にして、その分を子タスクに分配してください"
+                        value={t.days}
+                        onChange={(e) => editTaskDays(t.id, e.target.value)}
+                      />
+                    ) : (
+                      <div className="col-span-1 flex justify-between">
+                        <span className="text-left w-full">計</span>
+                        <span className="pr-3 text-right">{getParentTaskDays(tasks, index)}</span>
+                      </div>
                     )}
-                    <div className="col-span-1 flex justify-between">
-                      <span className="text-left w-full">計</span>
-                      <span className="pr-3 text-right">{getParentTaskDays(tasks, index)}</span>
-                    </div>
                     <div className="col-span-2">{fmtDate(getParentTaskStart(tasks, index))}</div>
                     <div className="col-span-2">{fmtDate(getParentTaskEnd(tasks, index))}</div>
                   </>
