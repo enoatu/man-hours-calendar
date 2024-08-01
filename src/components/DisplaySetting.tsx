@@ -45,7 +45,7 @@ export const FmtDate = ({
     result = `${date.getMonth() + 1}/${date.getDate()}`;
   } else {
     // mm/dd
-    result = `${date.getMonth().toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
+    result = `${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
   }
 
   if (displaySetting?.isDisplayWeekday) {
