@@ -59,7 +59,7 @@ export const TaskEdit = ({ tasks, updateTasks }: TaskEditProps) => {
       {
         id: generateRand(),
         name: "",
-        days: 1,
+        days: 0,
         start: new Date(),
         end: new Date()
       }
